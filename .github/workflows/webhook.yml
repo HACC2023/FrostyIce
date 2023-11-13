@@ -1,0 +1,31 @@
+name: Webhook on Main Branch
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  webhook:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set env
+      run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV && echo "USERNAME=${{ github.event.head_commit.author.username }}" >> $GITHUB_ENV
+    - name: Trigger Webhook
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{
+          "username": "GitHub",
+          "avatar_url": "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
+          "embeds": [
+            {
+              "type": "rich",
+              "title": "[${{github.event.repository.name}}:main] new commit",
+              "description": "[`${{ env.GITHUB_SHA_SHORT }}`](${{ github.event.head_commit.url }}) ${{ github.event.head_commit.message }} - ${{ env.USERNAME }}",
+              "author": {
+                "name": "${{ env.USERNAME }}",
+                "url": "https://github.com/${{ env.USERNAME }}",
+                "icon_url": "https://github.com/${{ env.USERNAME }}.png"
+              },
+              "url": "${{ github.event.head_commit.url }}"
+            }
+          ]
+        }' ${{ secrets.WEBHOOK_URL }}

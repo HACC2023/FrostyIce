@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.table :where(thead){
+  @apply text-slate-600;
+}
+
+.input-bordered, .select-bordered {
+  @apply border border-gray-200;
+}
+
+.label-text {
+  @apply text-slate-600;
+}
+
+.btn-outline {
+  @apply border-primary;
+  @apply text-primary
+}
+
+.btn-outline:hover {
+  @apply bg-primary;
+  @apply text-white;
+}
+
+.textarea-bordered {
+  @apply border border-gray-200;
+}
+/* .divider {
+  @apply text-slate-200
+} */
+/* .tab-bordered {
+  @apply border-slate-300
+} */
+
+/* .tab-active {
+  @apply border-primary !important
+} */
+

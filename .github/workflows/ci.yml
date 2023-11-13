@@ -1,0 +1,25 @@
+name: hello
+
+on: push
+
+defaults:
+  run:
+    working-directory: ./my-app
+
+jobs:
+  build-project:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install NPM dependencies
+        run: npm install
+      
+      - name: Ensure code quality via ESLint
+        run: npm run lint -- --fix
+
+      - name: Build project assets
+        run: npm run build

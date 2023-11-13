@@ -1,0 +1,41 @@
+{
+  "extends": ["next", "next/core-web-vitals"],
+  "plugins": ["unused-imports"],
+  "rules": {
+    "arrow-parens": "off",
+    "camelcase": "off",
+    "class-methods-use-this": "off",
+    "func-names": "off",
+    "import/no-absolute-path": "off",
+    "import/no-unresolved": "off",
+    "import/no-unused-modules": "error",
+    "import/extensions": "off",
+    "import/imports-first": "off",
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
+    "indent": ["error", 2],
+    "linebreak-style": "off",
+    "no-confusing-arrow": ["error", { "allowParens": true }],
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off",
+    "object-curly-newline": "off",
+    "object-property-newline": "off",
+    "object-shorthand": "off",
+    "operator-linebreak": "off",
+    "padded-blocks": "off",
+    "prefer-arrow-callback": "off",
+    "prefer-destructuring": "off",
+    "prefer-promise-reject-errors": "off",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-one-expression-per-line": "off",
+    "react/no-array-index-key": "off",
+    "react/prop-types": "warn",
+    "unused-imports/no-unused-imports": "error"
+  }
+}
