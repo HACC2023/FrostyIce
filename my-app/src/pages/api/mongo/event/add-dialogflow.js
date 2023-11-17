@@ -40,6 +40,7 @@ export default async function handler(req, res) {
       const eventDetails = {
         status: 'Reported',
         publicType,
+        reportedDate: new Date(),
         publicBiofoulingRating,
         publicLocationDesc,
         publicLatLongOrPositionDesc,

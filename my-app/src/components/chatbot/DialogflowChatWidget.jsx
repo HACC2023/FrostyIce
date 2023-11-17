@@ -30,6 +30,7 @@ const DialogflowChatWidget = () => {
         dfMessenger.setAttribute('project-id', 'white-sunspot-403307');
         dfMessenger.setAttribute('agent-id', '48d6d88b-9934-406d-8523-e3ec7f4f7381');
         dfMessenger.setAttribute('language-code', 'en');
+        dfMessenger.setAttribute('intent', 'default.start');
 
         // for the chat bubble to appear
         const chatBubble = document.createElement('df-messenger-chat-bubble');

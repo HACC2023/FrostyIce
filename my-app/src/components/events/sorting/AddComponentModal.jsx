@@ -83,7 +83,7 @@ const AddComponentModal = ({ id, event }) => {
             <input
               {...register("mass", { required: true})}
               type="number"
-              placeholder="Enter mass in Kg"
+              placeholder="Enter mass in kg"
               className="input input-bordered w-full"
             />
           </div>

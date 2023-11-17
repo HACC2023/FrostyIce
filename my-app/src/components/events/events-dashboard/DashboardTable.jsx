@@ -178,7 +178,16 @@ const DashboardTable = ({ events, isLoading }) => {
           </div>
         ) : filteredEvents.length ? (
           filteredEvents.map((event) => (
-            <div key={event._id} className="card card-bordered border-neutral bg-base-100">
+            <div
+              key={event._id}
+              className="card card-bordered border-neutral bg-base-100 w-full"
+            >
+              {/* if date less than 10 minutes show */}
+              {new Date(Date.now()) - new Date(event.reportedDate) < 600000 && (
+                <div className="badge badge-primary self-end -my-2 -mx-2">
+                  new
+                </div>
+              )}
               <div className="card-body px-8 py-5">
                 <div className="flex justify-between">
                   <div>
@@ -193,7 +202,9 @@ const DashboardTable = ({ events, isLoading }) => {
                         <ArrowTopRightOnSquareIcon className="w-4 h-4 md:w-6 md:h-6 ml-2 pt-1" />
                       </div>
                       <div className="text-sm md:text-md">
-                        <time className="my-3">{prettyHstDateTime(event.reportedDate)}</time>
+                        <time className="my-3">
+                          {prettyHstDateTime(event.reportedDate)}
+                        </time>
                         <div className="pt-2">
                           <div>
                             <span className="font-semibold">Description:</span>{" "}
@@ -204,7 +215,9 @@ const DashboardTable = ({ events, isLoading }) => {
                             {removalOrgName(event.removalOrgId)}
                           </div>
                           <div>
-                            <span className="font-semibold">Current Location:</span>{" "}
+                            <span className="font-semibold">
+                              Current Location:
+                            </span>{" "}
                             {event.tempStorage}
                           </div>
                         </div>
@@ -215,7 +228,8 @@ const DashboardTable = ({ events, isLoading }) => {
                       className="cursor-pointer hover:opacity-70 transition-all text-gray-700 flex mt-2 text-sm"
                     >
                       <ChatBubbleLeftRightIcon className="w-6 h-6 me-1" />
-                      {event.threadCount} message{event.threadCount === 1 ? "" : "s"}
+                      {event.threadCount} message
+                      {event.threadCount === 1 ? "" : "s"}
                     </Link>
                   </div>
                   <div className="ms-auto flex flex-1 flex-col justify-between">

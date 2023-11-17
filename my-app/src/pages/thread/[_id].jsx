@@ -32,8 +32,8 @@ const ThreadPage = () => {
   const { data: thread, error } = useSWR(`/api/mongo/thread/id/${_id}`, fetcher, {
     refreshInterval: 100,
   });
-  if (error) return <div>failed to load</div>;
-  if (!thread) return <Loading />;
+  if (error) return <Container><div className="my-auto text-center">Failed to load</div></Container>;
+  if (!thread) return <Container><Loading class="h-full py-auto"/></Container>;
 
   const handleSubmit = async (e, threadId) => {
     e.preventDefault();
@@ -184,8 +184,8 @@ const ThreadPage = () => {
   if (session) {
     return (
       <Container>
-        <div className="m-auto w-full min-h-screen my-10">
-          <h1 className="text-4xl font-semibold mb-10">Discussion</h1>
+        <div className="m-auto w-full min-h-screen">
+          <h1 className="text-4xl font-semibold mb-8">Discussion</h1>
           <main className="flex flex-col gap-16">
             <EventInfo thread={thread} />
             <MessagesContainer messages={thread.messages} />

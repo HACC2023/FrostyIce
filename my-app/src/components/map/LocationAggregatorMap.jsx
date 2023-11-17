@@ -1,5 +1,5 @@
 // components/Map.jsx
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import Map from "react-map-gl";
 import { HexagonLayer, HeatmapLayer } from "@deck.gl/aggregation-layers";
 // import { HexagonLayer } from "deck.gl";
@@ -18,7 +18,7 @@ const LocationAggregatorMap = ({
   data,
 }) => {
   const [layers, setLayers] = useState(null);
-  const [doneLoading, setDoneLoading] = useState(false);
+  const mapRef = useRef();
 
   const mapVisLayers = {
     hexagonLayer: [
@@ -98,7 +98,7 @@ const LocationAggregatorMap = ({
 
   return (
     <div>
-      <div className="h-[400px] w-full relative">
+      <div className="h-[400px] z-20 w-full relative">
         <DeckGL
           style={{ width: "100%", height: "100%" }}
           layers={layers ?? mapVisLayers.heatmapLayer}
@@ -109,20 +109,14 @@ const LocationAggregatorMap = ({
         >
           <Map
             reuseMaps
+            ref={mapRef}
             style={{ width: "100%", height: "100%" }}
             controller={true}
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
             mapStyle="mapbox://styles/giorgio808/cloro3xca005y01pq4dkc11ib"
+            onLoad={() => { mapRef.current.resize() }}
           />
         </DeckGL>
-        {/* {!doneLoading && (
-          <div className="h-full w-full absolute bg-primary flex flex-col items-center justify-center">
-            <div className="loading loading-ring text-white" />
-            <div className="text-white text-xs py-1 italic font-thin">
-              Loading map...
-            </div>
-          </div>
-        )} */}
       </div>
       <div className="flex py-2 gap-3 mt-4 flex-wrap">
         <div>

@@ -37,7 +37,7 @@ const Home = () => {
         labels: ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
         datasets: [
           {
-            label: "KG removed",
+            label: "kg Removed",
             data: [0,0,0,0,0,0],
             fill: true,
             backgroundColor: "rgba(75,192,192,0.2)",
@@ -124,7 +124,7 @@ const Home = () => {
           Welcome to Makai
         </h1>
         <p>
-          CMDR&apos;s AI-assisted platform that manages marine debris
+          CMDR&apos;s AI-assisted platform for managing marine debris
           reports, dispatches, and documentation
         </p>
       </header>
@@ -140,10 +140,10 @@ const Home = () => {
               Organization Statistics
             </h2>
           </header>
-          <div className="flex flex-col p-3 rounded-xl">
-            <div className="text-4xl font-bold mt-2">{orgKgRemoved ? orgKgRemoved : '0'} KG</div>
-            <div>Debris removed from environment</div>
-            {chartData ? <OrgChart data={chartData} className="mt-3" /> : <div className="mt-5"><Loading /></div>}
+          <div className="flex flex-col p-2 rounded-xl">
+            <div className="text-4xl font-bold">{orgKgRemoved ? orgKgRemoved : '0'} kg</div>
+            <div className="mb-2">Total debris removed from environment</div>
+            {chartData ? <OrgChart data={chartData} /> : <div className="mt-5"><Loading /></div>}
             <div className="flex mt-4 justify-center w-full">
               <div className="w-full">
                 <div className="text-xl font-bold">{orgLastRemovalDate ? prettyHstDate(orgLastRemovalDate) : '...'}</div>

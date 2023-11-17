@@ -9,6 +9,7 @@ import { fetcher } from "@/utils/fetcher";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Container from "@/components/Container";
+import Loading from "@/components/Loading";
 import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
@@ -49,49 +50,50 @@ const EventPage = () => {
     }
   }, [data]);
 
-  if (data && session) {
-    return (
-      <Container>
-        <div className="w-full min-h-full flex justify-center">
-          <div className="min-h-screen p-5 w-full md:max-w-7xl flex flex-col gap-5">
-            <ProgressBar
-              status={data.status}
+  return (data && session
+    ? <Container>
+      <div className="w-full min-h-full flex justify-center">
+        <div className="min-h-screen p-5 w-full md:max-w-7xl flex flex-col gap-5">
+          <ProgressBar
+            status={data.status}
+            setCurrentChecked={setCurrentStep}
+          />
+          <Link href={`/thread/${data.threadId}`} className="btn btn-primary w-56 self-center mb-5">
+            <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
+                Discussion
+          </Link>
+          <div className="flex flex-col gap-2">
+            <EventRemoval
+              event={data}
+              checked={currentStep === 0}
               setCurrentChecked={setCurrentStep}
             />
-            <Link href={`/thread/${data.threadId}`} className="btn btn-primary w-56 self-center mb-5">
-              <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
-              Discussion
-            </Link>
-            <div className="flex flex-col gap-2">
-              <EventRemoval
-                event={data}
-                checked={currentStep === 0}
-                setCurrentChecked={setCurrentStep}
-              />
-              <RemovalAndStorage
-                event={data}
-                userOrgId={session?.user.orgId}
-                checked={currentStep === 1}
-                setCurrentChecked={setCurrentStep}
-              />
-              <Sorting
-                event={data}
-                userOrgId={session?.user.orgId}
-                checked={currentStep === 2}
-                setCurrentChecked={setCurrentStep}
-              />
-              <Disposal
-                event={data}
-                userOrgId={session?.user.orgId}
-                checked={currentStep === 3}
-                setCurrentChecked={setCurrentStep}
-              />
-            </div>
+            <RemovalAndStorage
+              event={data}
+              userOrgId={session?.user.orgId}
+              checked={currentStep === 1}
+              setCurrentChecked={setCurrentStep}
+            />
+            <Sorting
+              event={data}
+              userOrgId={session?.user.orgId}
+              checked={currentStep === 2}
+              setCurrentChecked={setCurrentStep}
+            />
+            <Disposal
+              event={data}
+              userOrgId={session?.user.orgId}
+              checked={currentStep === 3}
+              setCurrentChecked={setCurrentStep}
+            />
           </div>
         </div>
-      </Container>
-    );
-  }
+      </div>
+    </Container>
+    : <Container>
+      <Loading />
+    </Container>
+  );
 };
 
 export default EventPage;

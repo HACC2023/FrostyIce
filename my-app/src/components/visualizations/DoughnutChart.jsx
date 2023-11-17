@@ -10,29 +10,24 @@ ChartJS.register(ArcElement, Tooltip, Legend);
  * @returns {JSX.Element}
  */
 const DoughnutChart = ({ events, sortedMaterials }) => {
-  const polymerOccurr = {};
+  const polymerKg = {};
   const bioRatingOccurr = {};
-  const disposalOccurr = {};
+  const disposalKg = {};
 
   // Iterate through the array and update the count for each polymer
   sortedMaterials.forEach((item) => {
-    const { polymer } = item;
-
-    if (!polymerOccurr[polymer]) {
-      polymerOccurr[polymer] = 0;
-    }
-
-    polymerOccurr[polymer]++;
+    const { polymer, mass } = item;
+    polymerKg[polymer] = (polymerKg[polymer] || 0) + mass;
   });
 
-  const polymers = Object.keys(polymerOccurr);
-  const polQnts = Object.values(polymerOccurr);
+  const polymers = Object.keys(polymerKg);
+  const polMasses = Object.values(polymerKg);
 
   // Iterate through the array and update the count for each biofouling rating
   events.forEach((item) => {
     const { publicBiofoulingRating } = item;
 
-    // Map the ratings to desired groups (1-3, 4-5, 6-7)
+    // Map the ratings to desired groups (1-3, 4-6, 7-10)
     let groupedRating;
     if (publicBiofoulingRating >= 1 && publicBiofoulingRating <= 3) {
       groupedRating = "1-3";
@@ -41,12 +36,7 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
     } else if (publicBiofoulingRating >= 7 && publicBiofoulingRating <= 10) {
       groupedRating = "7-10";
     }
-
-    // Update the count for the grouped rating
-    if (!bioRatingOccurr[groupedRating]) {
-      bioRatingOccurr[groupedRating] = 0;
-    }
-    bioRatingOccurr[groupedRating]++;
+    bioRatingOccurr[groupedRating] = (bioRatingOccurr[groupedRating] || 0) + 1;
   });
 
   // Extract arrays for biofouling ratings and their corresponding quantities
@@ -55,18 +45,15 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
 
   // Iterate through the array and update the count for each disposal method
   sortedMaterials.forEach((item) => {
-    const { disposalMechanism } = item;
+    const { disposalMechanism, mass } = item;
 
     if (disposalMechanism !== undefined) {
-      if (!disposalOccurr[disposalMechanism]) {
-        disposalOccurr[disposalMechanism] = 0;
-      }
-      disposalOccurr[disposalMechanism]++;
+      disposalKg[disposalMechanism] = (disposalKg[disposalMechanism] || 0) + mass;
     }
   });
 
-  const disposalMtd = Object.keys(disposalOccurr);
-  const disposalMtdQnts = Object.values(disposalOccurr);
+  const disposalMethods = Object.keys(disposalKg);
+  const disposalMethodsKg = Object.values(disposalKg);
 
   const htmlLegendPlugin = (legendContainerId) => {
     return {
@@ -135,9 +122,9 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
     labels: polymers,
     datasets: [
       {
-        label: "Polymers",
-        data: polQnts,
-        backgroundColor: ['#22d3ee', '#06b6d4', '#06b6d4', '#0e7490', '#155e75', '#164e63', '#083344'],
+        label: "Total kg",
+        data: polMasses,
+        backgroundColor: ['#67e8f9', '#22d3ee', '#06b6d4', '#06b6d4', '#0e7490', '#155e75', '#164e63', '#083344'],
         borderWidth: 1,
         hoverOffset: 4,
         legend: {
@@ -151,7 +138,7 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
     labels: bioRatings,
     datasets: [
       {
-        label: "Biofouling Rating",
+        label: "Total Reports",
         data: bioQnts,
         backgroundColor: ['#4ade80', '#22c55e', '#16a34a', '#15803d', '#166534', '#14532d', '#052e16'],
         borderWidth: 1,
@@ -164,11 +151,11 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
   };
 
   const dataPltDisposal = {
-    labels: disposalMtd,
+    labels: disposalMethods,
     datasets: [
       {
-        label: "Disposal Method",
-        data: disposalMtdQnts,
+        label: "Total kg",
+        data: disposalMethodsKg,
         backgroundColor: ['#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412', '#7c2d12', '#431407'],
         borderWidth: 1,
         hoverOffset: 4,
@@ -219,7 +206,7 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
       <div className="h-fit col">
         <div className="h-72 md:h-[22rem] px-5">
           <h6 className="text-secondary text-sm font-bold mb-4 text-center">
-            Polymer
+            Polymers by Kilogram
           </h6>
           <Doughnut data={dataPltPolymers} options={options} plugins={[htmlLegendPlugin('polyLegendContainer')]} className="mx-auto" />
           <div id="polyLegendContainer" className="mt-2"/>
@@ -228,7 +215,7 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
       <div className="h-fit col">
         <div className="h-72 md:h-[22rem] px-5">
           <h6 className="text-secondary text-sm font-bold mb-4 text-center">
-            Bio Fouling Rating
+            Bio Fouling by Num. of Reports
           </h6>
           <Doughnut data={dataPltBio} options={options} plugins={[htmlLegendPlugin('bioLegendContainer')]} className="mx-auto" />
           <div id="bioLegendContainer" className="mt-2" />
@@ -237,7 +224,7 @@ const DoughnutChart = ({ events, sortedMaterials }) => {
       <div className="h-72 col">
         <div className="h-64 md:h-[22rem] px-5">
           <h6 className="text-secondary text-sm font-bold mb-4 text-center">
-            Disposal Method
+            Disposal Method by Kilogram
           </h6>
           <Doughnut data={dataPltDisposal} options={options} plugins={[htmlLegendPlugin('disposalLegendContainer')]} className="mx-auto" />
           <div id="disposalLegendContainer" className="mt-2" />

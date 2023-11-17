@@ -4,10 +4,14 @@ import { ToastContainer } from "react-toastify";
 import DialogflowChatWidget from "@/components/chatbot/DialogflowChatWidget";
 import "@/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import Head from "next/head";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <>
+      <Head>
+        <title>Makai</title>
+      </Head>
       <SessionProvider session={session}>
         <div
           className="flex flex-col lg:flex-row min-h-screen text-primary bg-gradient-to-br from-slate-800 via-cyan-900 to-sky-950"

@@ -22,7 +22,7 @@ const Sorting = ({ event, userOrgId, checked, setCurrentChecked }) => {
       {STATUS.indexOf(event.status) > 1 ? (
         <>
           {userOrgId === event.removalOrgId && (
-            <section className="flex justify-between md:mt-10">
+            <section className="flex justify-between">
               <button
                 className="btn btn-secondary"
                 onClick={() =>

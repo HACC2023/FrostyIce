@@ -33,7 +33,7 @@ const Disposal = ({ event, userOrgId, checked, setCurrentChecked }) => {
               <thead>
                 <tr>
                   <th>Material</th>
-                  <th>Mass</th>
+                  <th>Mass (kg)</th>
                   <th>Polymers</th>
                   <th>Disposal Mechanism</th>
                   <th>Disposal Date</th>

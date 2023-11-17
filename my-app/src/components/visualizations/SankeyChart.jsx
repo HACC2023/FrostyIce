@@ -17,9 +17,44 @@ const SankeyDiagram = ({ data }) => (
       modifiers: [["darker", 0.8]],
     }}
     nodeBorderRadius={3}
+    nodeTooltip={(node) => {
+      // get approx width of title
+      const toNodeWidth = node.node.id.length * 8 + 115;
+      // if link is on the right side of the chart, move tooltip to the left
+      const transform = node.node.x0 > 10 ? `translate(-${toNodeWidth}px, -15px)` : 'translate(15px, -15px)';
+      return <div className="pointer-events-none absolute z-10 top-0 left-0" style={{ transform: transform }}>
+        <div className="bg-white rounded-sm shadow px-2">
+          <div className="whitespace-pre flex items-center">
+            <strong>{node.node.id}</strong>
+            <span className="block w-3 h-3 mx-2" style={{ background: node.node.color }}></span>
+            <strong>{node.node.formattedValue} kg</strong>
+          </div>
+        </div>
+      </div>;
+    }}
     linkOpacity={0.6}
     linkHoverOthersOpacity={0.3}
     linkContract={3}
+    linkTooltip={(node) => {
+      // get approx width of title
+      const toNodeWidth = node.link.target.id.length * 8 + 175;
+      // if link is on the right side of the chart, move tooltip to the left
+      const transform = node.link.source.x0 > 10 ? `translate(-${toNodeWidth}px, -15px)` : 'translate(15px, -15px)';
+      return <div className="pointer-events-none absolute z-10 top-0 left-0" style={{ transform: transform }}>
+        <div className="bg-white rounded-sm shadow px-2">
+          <div className="whitespace-pre flex items-center">
+            <span className="flex items-center">
+              <span className="block w-3 h-3 me-2" style={{ background: node.link.source.color }}></span>
+              <strong>{node.link.source.id}</strong>
+              &nbsp;&gt;&nbsp;
+              <strong>{node.link.target.id}</strong>
+              <span className="block w-3 h-3 mx-2" style={{ background: node.link.target.color }}></span>
+              <strong>{node.link.formattedValue} kg</strong>
+            </span>
+          </div>
+        </div>
+      </div>;
+    }}
     enableLinkGradient={true}
     labelPosition="outside"
     labelOrientation="horizontal"
@@ -79,8 +114,6 @@ const SankeyChart = ({ events, sortedMaterials }) => {
     (obj) => obj.polymer && obj.disposalMechanism
   );
 
-  console.log(disposalEvents);
-
   // Get node color based on id
   const getNodeColor = (id) => {
     const hash = id
@@ -90,16 +123,16 @@ const SankeyChart = ({ events, sortedMaterials }) => {
   };
 
   disposalEvents.forEach((item) => {
-    const { closestIsland, polymer, disposalMechanism } = item;
+    const { closestIsland, polymer, disposalMechanism, mass } = item;
 
     // Update node counts
     nodes[closestIsland] = (nodes[closestIsland] || 0) + 1;
-    nodes[polymer] = (nodes[polymer] || 0) + 1;
-    nodes[disposalMechanism] = (nodes[disposalMechanism] || 0) + 1;
+    nodes[polymer] = (nodes[polymer] || 0) + mass;
+    nodes[disposalMechanism] = (nodes[disposalMechanism] || 0) + mass;
 
     // Create links
-    links.push({ source: closestIsland, target: polymer, value: 1 });
-    links.push({ source: polymer, target: disposalMechanism, value: 1 });
+    links.push({ source: closestIsland, target: polymer, value: mass });
+    links.push({ source: polymer, target: disposalMechanism, value: mass });
   });
 
   const nodesArray = Object.keys(nodes).map((id) => ({
